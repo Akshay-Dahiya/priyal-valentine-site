@@ -187,7 +187,7 @@
       z-index: 5;
     }
 
-    /* UPDATED NO BUTTON (hover fun, no movement on hover) */
+    /* NO button: fun hover, moves only on click/tap */
     .no{
       position:absolute;
       left: 190px;
@@ -196,18 +196,14 @@
       color:#fff;
       border:1px solid var(--stroke);
 
-      /* FIX: stays below YES + mobile friendly */
       z-index: 4;
       touch-action: manipulation;
 
-      /* Smooth movement + hover animation */
       transition: left 140ms ease,
                   top 140ms ease,
                   transform 120ms ease,
                   box-shadow 120ms ease;
     }
-
-    /* Fun hover effect (no position change) */
     .no:hover{
       transform: translateY(-2px) scale(1.05);
       box-shadow: 0 8px 20px rgba(0,0,0,.25);
@@ -605,6 +601,7 @@
     closeBtn.addEventListener("click", ()=> {
       modal.classList.remove("show");
 
+      // stop voice + reset
       voice.pause();
       voice.currentTime = 0;
       playing = false;
@@ -614,7 +611,7 @@
     modal.addEventListener("click", (e)=>{ if(e.target===modal) modal.classList.remove("show"); });
 
     // -------------------------
-    // RUNAWAY NO + NPC (click/tap only — hover removed so YES never breaks)
+    // NO + NPC (moves ONLY on click/tap; hover is just animation)
     // -------------------------
     const noBtn = document.getElementById("noBtn");
     const actions = document.getElementById("actions");
@@ -665,21 +662,20 @@
       }, speed);
     }
 
+    // ✅ FIXED: function closes properly (this was your bug)
     function handleNoAttempt(e){
       e.preventDefault();
-      e.stopPropagation();
 
       noCount++;
       moveNoButton();
       burstHearts(4);
 
-      // NPC starts from first attempt
       npc.classList.add("show");
       const line = npcLines[Math.min(noCount-1, npcLines.length-1)];
       typeText(npcText, line, 16);
-    }
+    } // ✅ DO NOT DELETE THIS BRACE
 
-    // Click/tap only (hover removed)
+    // ✅ ONLY these listeners
     noBtn.addEventListener("click", handleNoAttempt);
     noBtn.addEventListener("touchstart", (e)=>handleNoAttempt(e), {passive:false});
   </script>
