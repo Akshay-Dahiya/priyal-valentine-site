@@ -161,7 +161,7 @@
       min-height:62px;
       padding-bottom:8px;
 
-      /* FIX: prevents NO button from stealing YES clicks */
+      /* prevents NO from stealing YES clicks */
       isolation: isolate;
     }
 
@@ -181,13 +181,10 @@
     .yes{
       background:#fff;
       color:#ff2f7a;
-
-      /* FIX: always clickable */
       position: relative;
-      z-index: 5;
+      z-index: 5; /* always on top */
     }
 
-    /* NO button: fun hover, moves only on click/tap */
     .no{
       position:absolute;
       left: 190px;
@@ -195,14 +192,10 @@
       background: rgba(0,0,0,.22);
       color:#fff;
       border:1px solid var(--stroke);
-
       z-index: 4;
       touch-action: manipulation;
 
-      transition: left 140ms ease,
-                  top 140ms ease,
-                  transform 120ms ease,
-                  box-shadow 120ms ease;
+      transition: left 140ms ease, top 140ms ease, transform 120ms ease, box-shadow 120ms ease;
     }
     .no:hover{
       transform: translateY(-2px) scale(1.05);
@@ -447,7 +440,7 @@
 
   <script>
     // -------------------------
-    // CUSTOM MESSAGE (UPDATED)
+    // CUSTOM MESSAGE
     // -------------------------
     const customMessage = `
       Hi <b>Ms Priyal Sanjeev Kumar</b>… 💗<br><br>
@@ -494,7 +487,7 @@
     }, 3200);
 
     // -------------------------
-    // PLAY SONG BUTTON -> VOICE MEMO (pause/resume)
+    // VOICE MEMO BUTTON
     // -------------------------
     const voice = document.getElementById("voice");
     const musicBtn = document.getElementById("musicBtn");
@@ -586,7 +579,7 @@
     }
 
     // -------------------------
-    // YES MODAL
+    // YES MODAL (YES ALWAYS WORKS)
     // -------------------------
     const modal = document.getElementById("modal");
     const yesBtn = document.getElementById("yesBtn");
@@ -601,7 +594,6 @@
     closeBtn.addEventListener("click", ()=> {
       modal.classList.remove("show");
 
-      // stop voice + reset
       voice.pause();
       voice.currentTime = 0;
       playing = false;
@@ -611,15 +603,15 @@
     modal.addEventListener("click", (e)=>{ if(e.target===modal) modal.classList.remove("show"); });
 
     // -------------------------
-    // NO + NPC (moves ONLY on click/tap; hover is just animation)
+    // NO + NPC (QUEUE + LOCK)
+    // - NO can be clicked anytime
+    // - it will only ADVANCE the dialog after the current line finishes typing
+    // - YES always works
     // -------------------------
     const noBtn = document.getElementById("noBtn");
     const actions = document.getElementById("actions");
     const npc = document.getElementById("npc");
     const npcText = document.getElementById("npcText");
-
-    let noCount = 0;
-    let typingTimer = null;
 
     const npcLines = [
       "Okay… we’re clicking NO now? Bold move.",
@@ -631,6 +623,11 @@
       "Now press YES before I unlock desperation DLC 😭"
     ];
 
+    let noCount = 0;
+    let typingTimer = null;
+    let isTyping = false;
+    const dialogQueue = [];
+
     function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
 
     function moveNoButton(){
@@ -638,11 +635,8 @@
       const btnRect = noBtn.getBoundingClientRect();
 
       const pad = 6;
-      const maxXraw = rect.width - btnRect.width - pad;
-      const maxYraw = rect.height - btnRect.height - pad;
-
-      const maxX = Math.max(0, maxXraw);
-      const maxY = Math.max(0, maxYraw);
+      const maxX = Math.max(0, rect.width - btnRect.width - pad);
+      const maxY = Math.max(0, rect.height - btnRect.height - pad);
 
       const x = clamp(Math.floor(Math.random() * (maxX + 1)), 0, maxX);
       const y = clamp(Math.floor(Math.random() * (maxY + 1)), 0, maxY);
@@ -651,33 +645,54 @@
       noBtn.style.top  = y + "px";
     }
 
-    function typeText(el, text, speed=16){
+    function typeText(el, text, speed=16, done){
       clearInterval(typingTimer);
       el.textContent = "";
+      isTyping = true;
+
       let i = 0;
       typingTimer = setInterval(()=>{
         el.textContent += text[i] || "";
         i++;
-        if(i > text.length) clearInterval(typingTimer);
+        if(i > text.length){
+          clearInterval(typingTimer);
+          isTyping = false;
+          if (done) done();
+        }
       }, speed);
     }
 
-    // ✅ FIXED: function closes properly (this was your bug)
-    function handleNoAttempt(e){
-      e.preventDefault();
+    function playNextDialog(){
+      if (isTyping) return;
+      const next = dialogQueue.shift();
+      if (!next) return;
 
+      npc.classList.add("show");
+      typeText(npcText, next, 16, () => {
+        // After finishing a line, automatically play next queued line (if any)
+        playNextDialog();
+      });
+    }
+
+    function handleNoAttempt(ev){
+      // One event for mouse + touch (prevents double-fire)
+      if (ev.pointerType === "touch") ev.preventDefault();
+
+      // Move the button only on actual click/tap
       noCount++;
       moveNoButton();
       burstHearts(4);
 
-      npc.classList.add("show");
-      const line = npcLines[Math.min(noCount-1, npcLines.length-1)];
-      typeText(npcText, line, 16);
-    } // ✅ DO NOT DELETE THIS BRACE
+      // queue next dialog line
+      const line = npcLines[Math.min(noCount - 1, npcLines.length - 1)];
+      dialogQueue.push(line);
 
-    // ✅ ONLY these listeners
-    noBtn.addEventListener("click", handleNoAttempt);
-    noBtn.addEventListener("touchstart", (e)=>handleNoAttempt(e), {passive:false});
+      // start dialog if not already typing
+      playNextDialog();
+    }
+
+    // ✅ only ONE listener: pointerdown
+    noBtn.addEventListener("pointerdown", handleNoAttempt, {passive:false});
   </script>
 </body>
 </html>
