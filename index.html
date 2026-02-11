@@ -1,0 +1,687 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Priyal 💘</title>
+
+  <style>
+    :root{
+      --bg1:#ff4f87;
+      --bg2:#ff9bd1;
+      --glass: rgba(255,255,255,.16);
+      --glass2: rgba(255,255,255,.10);
+      --stroke: rgba(255,255,255,.22);
+      --text: #fff;
+      --shadow: 0 22px 70px rgba(0,0,0,.22);
+      --shadow2: 0 16px 40px rgba(0,0,0,.18);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      overflow:hidden;
+      background:
+        radial-gradient(1000px 800px at 10% 15%, rgba(255,255,255,.25), transparent 60%),
+        radial-gradient(900px 700px at 90% 25%, rgba(255,255,255,.18), transparent 60%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+    }
+
+    /* floating hearts */
+    .heart{
+      position:fixed;
+      bottom:-40px;
+      font-size:18px;
+      opacity:.9;
+      animation: floatUp linear forwards;
+      filter: drop-shadow(0 8px 14px rgba(0,0,0,.18));
+      pointer-events:none;
+      user-select:none;
+      z-index:1;
+    }
+    @keyframes floatUp{
+      to{ transform: translateY(-120vh) rotate(18deg); opacity:0; }
+    }
+
+    /* layout */
+    .wrap{
+      position:relative;
+      z-index:2;
+      min-height:100%;
+      display:grid;
+      place-items:center;
+      padding:22px;
+    }
+
+    .shell{
+      width:min(1100px, 100%);
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap:18px;
+      align-items:stretch;
+    }
+
+    @media (max-width: 900px){
+      body{overflow:auto}
+      .shell{ grid-template-columns: 1fr; }
+    }
+
+    .card{
+      background: linear-gradient(180deg, var(--glass), var(--glass2));
+      border:1px solid var(--stroke);
+      border-radius:28px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      padding:18px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .topbar{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.12);
+      font-weight:900;
+      letter-spacing:.2px;
+    }
+
+    .pill{
+      display:inline-block;
+      padding:4px 10px;
+      border-radius:999px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.12);
+      font-weight:900;
+    }
+
+    .btnGhost{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.12);
+      color:#fff;
+      font-weight:950;
+      cursor:pointer;
+      transition:.18s transform;
+      user-select:none;
+    }
+    .btnGhost:hover{ transform: translateY(-1px); }
+
+    .hero{
+      padding:12px 6px 6px;
+    }
+    h1{
+      margin:10px 0 8px;
+      font-size: clamp(34px, 4vw, 60px);
+      line-height:1.02;
+      letter-spacing:-.8px;
+    }
+    .sub{
+      margin:0 0 10px;
+      font-size: clamp(16px, 1.7vw, 19px);
+      opacity:.95;
+      line-height:1.45;
+    }
+
+    .note{
+      margin-top:12px;
+      padding:14px;
+      border-radius:20px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.12);
+      box-shadow: var(--shadow2);
+    }
+    .note p{ margin:0; line-height:1.6; font-weight:650; }
+
+    .actions{
+      margin-top:14px;
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+      position:relative;
+      min-height:62px;
+      padding-bottom:8px;
+
+      /* FIX: prevents NO button from stealing YES clicks */
+      isolation: isolate;
+    }
+
+    .btn{
+      border:0;
+      padding:14px 18px;
+      border-radius:18px;
+      font-size:16px;
+      font-weight:1000;
+      cursor:pointer;
+      transition:.18s transform;
+      box-shadow: 0 14px 30px rgba(0,0,0,.16);
+      user-select:none;
+    }
+    .btn:active{ transform: translateY(1px) scale(.99); }
+
+    .yes{
+      background:#fff;
+      color:#ff2f7a;
+
+      /* FIX: always clickable */
+      position: relative;
+      z-index: 5;
+    }
+
+    /* UPDATED NO BUTTON (hover fun, no movement on hover) */
+    .no{
+      position:absolute;
+      left: 190px;
+      top: 0px;
+      background: rgba(0,0,0,.22);
+      color:#fff;
+      border:1px solid var(--stroke);
+
+      /* FIX: stays below YES + mobile friendly */
+      z-index: 4;
+      touch-action: manipulation;
+
+      /* Smooth movement + hover animation */
+      transition: left 140ms ease,
+                  top 140ms ease,
+                  transform 120ms ease,
+                  box-shadow 120ms ease;
+    }
+
+    /* Fun hover effect (no position change) */
+    .no:hover{
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 8px 20px rgba(0,0,0,.25);
+    }
+
+    .hint{
+      margin-top:6px;
+      font-size:13px;
+      opacity:.9;
+    }
+
+    /* slideshow panel */
+    .frame{
+      padding:0;
+      display:grid;
+      place-items:stretch;
+      min-height: 560px;
+    }
+    @media (max-width: 900px){
+      .frame{ min-height: 440px; }
+    }
+
+    .slides{
+      position:relative;
+      width:100%;
+      height:100%;
+      border-radius:28px;
+      overflow:hidden;
+      border:1px solid var(--stroke);
+      box-shadow: var(--shadow);
+    }
+
+    .slide{
+      position:absolute;
+      inset:0;
+      background-size:cover;
+      background-position:center;
+      opacity:0;
+      transform: scale(1.05);
+      transition: opacity 1s ease, transform 1.4s ease;
+      filter: saturate(1.04) contrast(1.03);
+    }
+    .slide.show{
+      opacity:1;
+      transform: scale(1.0);
+    }
+
+    .shade{
+      position:absolute;
+      inset:0;
+      background: linear-gradient(180deg, rgba(0,0,0,0) 45%, rgba(0,0,0,.50));
+      pointer-events:none;
+    }
+
+    .caption{
+      position:absolute;
+      left:14px; right:14px; bottom:14px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:10px;
+      text-shadow: 0 14px 26px rgba(0,0,0,.55);
+      font-weight:950;
+    }
+    .capSmall{
+      font-size:13px;
+      opacity:.95;
+      font-weight:900;
+    }
+
+    /* NPC */
+    .npc{
+      position:fixed;
+      left:18px;
+      bottom:18px;
+      display:none;
+      align-items:flex-end;
+      gap:14px;
+      z-index:50;
+    }
+    .npc.show{ display:flex; }
+    .npc img{
+      width:120px;
+      height:auto;
+      image-rendering: pixelated;
+      filter: drop-shadow(0 18px 30px rgba(0,0,0,.25));
+      border-radius:14px;
+    }
+    .bubble{
+      max-width:min(560px, calc(100vw - 170px));
+      background: rgba(255,255,255,.92);
+      color:#141414;
+      border-radius:18px;
+      padding:12px 14px;
+      box-shadow: var(--shadow2);
+      border:1px solid rgba(0,0,0,.06);
+      transform-origin:left bottom;
+      animation: pop .18s ease-out;
+    }
+    @keyframes pop{
+      from{ transform: scale(.98); opacity:0; }
+      to{ transform: scale(1); opacity:1; }
+    }
+    .bubble .name{ font-weight:1000; margin-bottom:6px; }
+    .bubble .text{ font-weight:800; line-height:1.45; }
+    .bubble .tiny{ margin-top:8px; font-size:12px; opacity:.72; font-weight:800; }
+
+    /* Modal */
+    .modal{
+      position:fixed;
+      inset:0;
+      display:none;
+      place-items:center;
+      background: rgba(0,0,0,.45);
+      z-index:60;
+      padding:18px;
+    }
+    .modal.show{ display:grid; }
+    .modalCard{
+      width:min(680px, 100%);
+      background: linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.12));
+      border:1px solid var(--stroke);
+      border-radius:26px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      padding:18px;
+      text-align:center;
+    }
+    .modalCard h2{
+      margin:10px 0 6px;
+      font-size: 38px;
+      letter-spacing:-.5px;
+    }
+    .modalCard p{
+      margin:0;
+      opacity:.95;
+      line-height:1.6;
+      font-weight:650;
+      font-size:16px;
+    }
+    .modalRow{
+      margin-top:12px;
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    canvas{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:70;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="confetti"></canvas>
+
+  <div class="wrap">
+    <div class="shell">
+      <!-- LEFT: text -->
+      <div class="card">
+        <div class="topbar">
+          <div class="chip">💌 Made for <span class="pill">Ms Priyal Sanjeev Kumar</span></div>
+          <button class="btnGhost" id="musicBtn" type="button">▶️ Play song</button>
+        </div>
+
+        <div class="hero">
+          <h1>Hey Priyal… 💘</h1>
+          <p class="sub">
+            This is me doing things properly — because you deserve that.
+          </p>
+
+          <div class="note">
+            <p id="message"></p>
+          </div>
+
+          <div class="actions" id="actions">
+            <button class="btn yes" id="yesBtn" type="button">YES 😭❤️</button>
+            <button class="btn no" id="noBtn" type="button">NO 🙄</button>
+          </div>
+
+          <div class="hint">
+            If you try “NO” even once… my pixel character will start yapping 🕹️
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: slideshow -->
+      <div class="card frame">
+        <div class="slides" aria-label="Slideshow">
+          <div class="slide show" id="s1"></div>
+          <div class="slide" id="s2"></div>
+          <div class="slide" id="s3"></div>
+          <div class="shade"></div>
+          <div class="caption">
+            <div>✨ Us</div>
+            <div class="capSmall" id="slideCount">1 / 3</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VOICE MEMO -->
+  <audio id="voice" preload="auto">
+    <source src="voice.m4a" type="audio/mp4" />
+  </audio>
+
+  <!-- NPC -->
+  <div class="npc" id="npc">
+    <img src="character.jpeg" alt="Character" />
+    <div class="bubble">
+      <div class="name">Akshay.exe</div>
+      <div class="text" id="npcText">…</div>
+      <div class="tiny">Tip: press YES before I unlock chaos 😭</div>
+    </div>
+  </div>
+
+  <!-- YES modal (PINCHU) -->
+  <div class="modal" id="modal">
+    <div class="modalCard">
+      <h2>Love you my pinchu panda 😭💘</h2>
+
+      <img src="pinchu.jpeg"
+           alt="Pinchu"
+           style="width:min(280px,85%);border-radius:22px;margin:14px 0;box-shadow:0 16px 45px rgba(0,0,0,.28);">
+
+      <p>
+        Okay wow… you just made me the happiest guy alive.<br><br>
+        Now send me a screenshot with: <b>“Yes, I’m your Valentine.”</b> 😌❤️
+      </p>
+
+      <div class="modalRow">
+        <button class="btn yes" id="closeBtn" type="button">Close 🥰</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // -------------------------
+    // CUSTOM MESSAGE (UPDATED)
+    // -------------------------
+    const customMessage = `
+      Hi <b>Ms Priyal Sanjeev Kumar</b>… 💗<br><br>
+
+      I know I joke a lot.
+      I tease you.
+      I call you things you pretend to hate.<br><br>
+
+      But this part is real.<br><br>
+
+      There’s something about you —
+      the way you care,
+      the way you stay strong,
+      the way you make everything feel lighter.<br><br>
+
+      You’ve quietly become my favourite person.<br><br>
+
+      So no drama.
+      No running away.
+      Just me asking you properly…<br><br>
+
+      <b>Will you be my Valentine?</b> 🌹
+    `;
+    document.getElementById("message").innerHTML = customMessage;
+
+    // -------------------------
+    // SLIDESHOW
+    // -------------------------
+    const slides = ["photo1.jpeg","photo2.jpeg","photo3.jpeg"];
+    const slideEls = [
+      document.getElementById("s1"),
+      document.getElementById("s2"),
+      document.getElementById("s3")
+    ];
+    slides.forEach((src,i)=> slideEls[i].style.backgroundImage = `url('${src}')`);
+
+    let idx = 0;
+    const slideCount = document.getElementById("slideCount");
+    setInterval(() => {
+      slideEls[idx].classList.remove("show");
+      idx = (idx + 1) % 3;
+      slideEls[idx].classList.add("show");
+      slideCount.textContent = `${idx+1} / 3`;
+    }, 3200);
+
+    // -------------------------
+    // PLAY SONG BUTTON -> VOICE MEMO (pause/resume)
+    // -------------------------
+    const voice = document.getElementById("voice");
+    const musicBtn = document.getElementById("musicBtn");
+    let playing = false;
+
+    musicBtn.addEventListener("click", async () => {
+      try{
+        if(!playing){
+          if (voice.ended) voice.currentTime = 0;
+          await voice.play();
+          playing = true;
+          musicBtn.textContent = "⏸️ Pause";
+          burstHearts(10);
+        }else{
+          voice.pause();
+          playing = false;
+          musicBtn.textContent = "▶️ Play song";
+        }
+      }catch(e){
+        alert("Tap again — phones block audio until you interact.");
+      }
+    });
+
+    voice.addEventListener("ended", () => {
+      playing = false;
+      musicBtn.textContent = "▶️ Play song";
+    });
+
+    // -------------------------
+    // HEARTS
+    // -------------------------
+    const heartEmojis = ["❤️","💗","💖","💘","💕","🌹","✨"];
+    function spawnHeart(){
+      const h = document.createElement("div");
+      h.className = "heart";
+      h.textContent = heartEmojis[Math.floor(Math.random()*heartEmojis.length)];
+      h.style.left = Math.random()*100 + "vw";
+      h.style.animationDuration = (3.5 + Math.random()*3.5) + "s";
+      h.style.fontSize = (14 + Math.random()*18) + "px";
+      document.body.appendChild(h);
+      setTimeout(()=>h.remove(), 7500);
+    }
+    setInterval(spawnHeart, 260);
+    function burstHearts(n){ for(let i=0;i<n;i++) setTimeout(spawnHeart, i*35); }
+
+    // -------------------------
+    // CONFETTI
+    // -------------------------
+    const canvas = document.getElementById("confetti");
+    const ctx = canvas.getContext("2d");
+    let W,H, confetti = [], raf;
+
+    function resize(){
+      W = canvas.width = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resize);
+    resize();
+
+    function rand(a,b){ return Math.random()*(b-a)+a; }
+
+    function launchConfetti(){
+      cancelAnimationFrame(raf);
+      confetti = [];
+      for(let i=0;i<230;i++){
+        confetti.push({
+          x: rand(0,W), y: rand(-H,0),
+          r: rand(3,6), vy: rand(2,6), vx: rand(-2.3,2.3),
+          rot: rand(0,Math.PI), vr: rand(-0.2,0.2),
+          life: rand(70,150)
+        });
+      }
+      (function anim(){
+        ctx.clearRect(0,0,W,H);
+        confetti.forEach(p=>{
+          p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr; p.life--;
+          const hue = (p.x/W)*360;
+          ctx.save();
+          ctx.translate(p.x,p.y);
+          ctx.rotate(p.rot);
+          ctx.fillStyle = `hsl(${hue}, 95%, 70%)`;
+          ctx.fillRect(-p.r, -p.r, p.r*2.2, p.r*1.4);
+          ctx.restore();
+        });
+        confetti = confetti.filter(p=> p.life>0 && p.y < H+30);
+        if(confetti.length) raf=requestAnimationFrame(anim);
+      })();
+      setTimeout(()=>cancelAnimationFrame(raf), 4600);
+    }
+
+    // -------------------------
+    // YES MODAL
+    // -------------------------
+    const modal = document.getElementById("modal");
+    const yesBtn = document.getElementById("yesBtn");
+    const closeBtn = document.getElementById("closeBtn");
+
+    yesBtn.addEventListener("click", () => {
+      launchConfetti();
+      burstHearts(28);
+      modal.classList.add("show");
+    });
+
+    closeBtn.addEventListener("click", ()=> {
+      modal.classList.remove("show");
+
+      voice.pause();
+      voice.currentTime = 0;
+      playing = false;
+      musicBtn.textContent = "▶️ Play song";
+    });
+
+    modal.addEventListener("click", (e)=>{ if(e.target===modal) modal.classList.remove("show"); });
+
+    // -------------------------
+    // RUNAWAY NO + NPC (click/tap only — hover removed so YES never breaks)
+    // -------------------------
+    const noBtn = document.getElementById("noBtn");
+    const actions = document.getElementById("actions");
+    const npc = document.getElementById("npc");
+    const npcText = document.getElementById("npcText");
+
+    let noCount = 0;
+    let typingTimer = null;
+
+    const npcLines = [
+      "Okay… we’re clicking NO now? Bold move.",
+      "You know he practiced this speech 14 times right?",
+      "He even fixed the bugs in this website for you.",
+      "Don’t make me start emotional dialogue mode…",
+      "Fine. Serious voice activated.",
+      "He really likes you, Priyal.",
+      "Now press YES before I unlock desperation DLC 😭"
+    ];
+
+    function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+
+    function moveNoButton(){
+      const rect = actions.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
+
+      const pad = 6;
+      const maxXraw = rect.width - btnRect.width - pad;
+      const maxYraw = rect.height - btnRect.height - pad;
+
+      const maxX = Math.max(0, maxXraw);
+      const maxY = Math.max(0, maxYraw);
+
+      const x = clamp(Math.floor(Math.random() * (maxX + 1)), 0, maxX);
+      const y = clamp(Math.floor(Math.random() * (maxY + 1)), 0, maxY);
+
+      noBtn.style.left = x + "px";
+      noBtn.style.top  = y + "px";
+    }
+
+    function typeText(el, text, speed=16){
+      clearInterval(typingTimer);
+      el.textContent = "";
+      let i = 0;
+      typingTimer = setInterval(()=>{
+        el.textContent += text[i] || "";
+        i++;
+        if(i > text.length) clearInterval(typingTimer);
+      }, speed);
+    }
+
+    function handleNoAttempt(e){
+      e.preventDefault();
+      e.stopPropagation();
+
+      noCount++;
+      moveNoButton();
+      burstHearts(4);
+
+      // NPC starts from first attempt
+      npc.classList.add("show");
+      const line = npcLines[Math.min(noCount-1, npcLines.length-1)];
+      typeText(npcText, line, 16);
+    }
+
+    // Click/tap only (hover removed)
+    noBtn.addEventListener("click", handleNoAttempt);
+    noBtn.addEventListener("touchstart", (e)=>handleNoAttempt(e), {passive:false});
+  </script>
+</body>
+</html>
