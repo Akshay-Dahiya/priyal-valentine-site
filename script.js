@@ -18,7 +18,8 @@ class Particle {
         this.speedX = (Math.random() - 0.5) * 0.4;
         this.speedY = (Math.random() - 0.5) * 0.4;
         this.opacity = Math.random() * 0.4 + 0.1;
-        this.color = Math.random() > 0.5 ? '#e91e63' : '#ff6090';
+        const palette = ['#ff5a8c', '#ff85a8', '#c8a27c', '#e6c7a8'];
+        this.color = palette[Math.floor(Math.random() * palette.length)];
     }
     update() {
         this.x += this.speedX;
@@ -49,7 +50,7 @@ function animateParticles() {
                 ctx.beginPath();
                 ctx.moveTo(a.x, a.y);
                 ctx.lineTo(b.x, b.y);
-                ctx.strokeStyle = '#e91e63';
+                ctx.strokeStyle = '#ff5a8c';
                 ctx.globalAlpha = 0.03 * (1 - dist / 120);
                 ctx.stroke();
                 ctx.globalAlpha = 1;
@@ -223,7 +224,7 @@ const timelineObserver = new IntersectionObserver((entries) => {
 timelineItems.forEach(item => timelineObserver.observe(item));
 
 // ========== GENERAL SCROLL REVEAL ==========
-const revealElements = document.querySelectorAll('.reason-card, .gallery-item, .proof-card, .love-meter-box, .promise-box');
+const revealElements = document.querySelectorAll('.reason-card, .gallery-item, .love-meter-box, .promise-box, .plan-item');
 const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry, index) => {
         if (entry.isIntersecting) {
@@ -440,22 +441,26 @@ const calGrid = document.getElementById('cal-grid');
 const calMonthYear = document.getElementById('cal-month-year');
 const calPrev = document.getElementById('cal-prev');
 const calNext = document.getElementById('cal-next');
+const calNote = document.getElementById('cal-note');
+const countdownValue = document.getElementById('countdown-value');
 
 let calDate = new Date();
 
-// Special dates
-const specialDates = {
-    // Format: 'YYYY-MM-DD': 'type' (special = anniversary, date-night = planned dates)
-    '18': 'special', // 18th of every month is your anniversary
+// Recurring date plans keyed by day-of-month (customizable!)
+const datePlans = {
+    18: { type: 'special', label: 'Our monthly anniversary 💕 — celebrate us!' },
+    7:  { type: 'date-night', label: 'Coffee date ☕ — find a new cozy cafe' },
+    14: { type: 'date-night', label: 'Movie night 🎬 — your pick, my cuddles' },
+    25: { type: 'date-night', label: 'Sunset drive 🌅 — windows down, our playlist on' },
 };
+
+const months = ['January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'];
 
 function renderCalendar() {
     const year = calDate.getFullYear();
     const month = calDate.getMonth();
     const today = new Date();
-
-    const months = ['January', 'February', 'March', 'April', 'May', 'June',
-                    'July', 'August', 'September', 'October', 'November', 'December'];
 
     calMonthYear.textContent = `${months[month]} ${year}`;
 
@@ -464,30 +469,49 @@ function renderCalendar() {
 
     calGrid.innerHTML = '';
 
-    // Empty cells before first day
     for (let i = 0; i < firstDay; i++) {
         const empty = document.createElement('div');
         empty.className = 'cal-day empty';
         calGrid.appendChild(empty);
     }
 
-    // Day cells
     for (let day = 1; day <= daysInMonth; day++) {
         const cell = document.createElement('div');
         cell.className = 'cal-day';
         cell.textContent = day;
 
-        // Highlight today
         if (day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
             cell.classList.add('today');
         }
 
-        // Highlight 18th (monthly anniversary)
-        if (day === 18) {
-            cell.classList.add('special');
+        const plan = datePlans[day];
+        if (plan) {
+            cell.classList.add(plan.type, 'has-plan');
+            cell.addEventListener('click', () => {
+                document.querySelectorAll('.cal-day.selected').forEach(d => d.classList.remove('selected'));
+                cell.classList.add('selected');
+                calNote.textContent = plan.label;
+                calNote.classList.add('active');
+            });
         }
 
         calGrid.appendChild(cell);
+    }
+}
+
+function updateAnniversaryCountdown() {
+    const now = new Date();
+    let next = new Date(now.getFullYear(), now.getMonth(), 18);
+    if (now.getDate() >= 18) {
+        next = new Date(now.getFullYear(), now.getMonth() + 1, 18);
+    }
+    const diffDays = Math.ceil((next - now) / (1000 * 60 * 60 * 24));
+    if (diffDays === 0) {
+        countdownValue.textContent = "It's today! 🎉";
+    } else if (diffDays === 1) {
+        countdownValue.textContent = "Tomorrow! 💕";
+    } else {
+        countdownValue.textContent = `${diffDays} days`;
     }
 }
 
@@ -502,3 +526,24 @@ calNext.addEventListener('click', () => {
 });
 
 renderCalendar();
+updateAnniversaryCountdown();
+
+
+
+
+// ========== SCROLL PROGRESS + BACK TO TOP ==========
+const scrollProgress = document.getElementById('scroll-progress');
+const scrollTopBtn = document.getElementById('scroll-top');
+
+window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const percent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    scrollProgress.style.width = percent + '%';
+
+    scrollTopBtn.classList.toggle('show', scrollTop > 600);
+});
+
+scrollTopBtn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+});

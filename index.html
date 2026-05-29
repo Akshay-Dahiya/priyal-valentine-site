@@ -8,6 +8,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress" id="scroll-progress"></div>
+
     <!-- Particles Background -->
     <canvas id="particles-canvas"></canvas>
 
@@ -19,6 +22,7 @@
             <li><a href="#letter">Letter</a></li>
             <li><a href="#reasons">Why You</a></li>
             <li><a href="#gallery">Memories</a></li>
+            <li><a href="#silly">Silly You</a></li>
             <li><a href="#timeline">Journey</a></li>
             <li><a href="#our-space">Our Space</a></li>
         </ul>
@@ -41,7 +45,7 @@
     <!-- Hero Section -->
     <section class="hero" id="hero">
         <div class="hero-content">
-            <div class="hero-badge">Since Feb 18, 2026 💕</div>
+            <div class="hero-badge">☕ Since Feb 18, 2026 · Brewed with love 💕</div>
             <h1 class="hero-title">
                 <span class="title-line">Priyal,</span>
                 <span class="title-line accent">Every Day With You Is My Favorite Day</span>
@@ -193,11 +197,104 @@
                     <img src="images/memory4.jpeg" alt="Memory 4" class="gallery-img" loading="lazy">
                     <div class="gallery-overlay"><p>Our World</p></div>
                 </div>
-                <div class="gallery-item">
-                    <img src="images/pinchu.jpeg" alt="Pinchu" class="gallery-img" loading="lazy">
-                    <div class="gallery-overlay"><p>Pinchu 🐼</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Best of 3 Months Section -->
+    <section class="best-of" id="best-of">
+        <div class="container">
+            <h2 class="section-title">The Best of Our 3 Months ☕</h2>
+            <p class="section-subtitle">The three photos that make my heart skip — my absolute favorites of us</p>
+            <div class="best-grid">
+                <figure class="best-card">
+                    <div class="best-rank">#1</div>
+                    <div class="best-img-wrap">
+                        <img src="images/best1.jpeg" alt="Best moment 1" class="best-img" loading="lazy"
+                             onerror="this.classList.add('img-missing');this.parentElement.classList.add('placeholder');">
+                        <div class="best-placeholder-text">☕<span>Add best1.jpeg</span></div>
+                    </div>
+                    <figcaption>
+                        <h3>The One That Started It All</h3>
+                        <p>I still look at this one and smile like an idiot.</p>
+                    </figcaption>
+                </figure>
+                <figure class="best-card featured">
+                    <div class="best-rank">#2</div>
+                    <div class="best-img-wrap">
+                        <img src="images/best2.jpeg" alt="Best moment 2" class="best-img" loading="lazy"
+                             onerror="this.classList.add('img-missing');this.parentElement.classList.add('placeholder');">
+                        <div class="best-placeholder-text">💕<span>Add best2.jpeg</span></div>
+                    </div>
+                    <figcaption>
+                        <h3>My Favorite Version of Us</h3>
+                        <p>This is the photo I'd save if I could only keep one.</p>
+                    </figcaption>
+                </figure>
+                <figure class="best-card">
+                    <div class="best-rank">#3</div>
+                    <div class="best-img-wrap">
+                        <img src="images/best3.jpeg" alt="Best moment 3" class="best-img" loading="lazy"
+                             onerror="this.classList.add('img-missing');this.parentElement.classList.add('placeholder');">
+                        <div class="best-placeholder-text">✨<span>Add best3.jpeg</span></div>
+                    </div>
+                    <figcaption>
+                        <h3>Proof We're Adorable</h3>
+                        <p>Objectively the cutest couple. I don't make the rules.</p>
+                    </figcaption>
+                </figure>
+            </div>
+        </div>
+    </section>
+
+    <!-- Silly Photos Section -->
+    <section class="silly" id="silly">
+        <div class="container">
+            <h2 class="section-title">Your Silly Little Photos 🤪</h2>
+            <p class="section-subtitle">The ones you'd <em>kill</em> to delete from my phone... but they're way too cute to ever let go</p>
+            <div class="silly-board">
+                <div class="silly-polaroid" style="--rot:-5deg;">
+                    <div class="silly-img-wrap">
+                        <img src="images/silly1.jpeg" alt="Silly 1" class="silly-img" loading="lazy"
+                             onerror="this.classList.add('img-missing');this.parentElement.classList.add('placeholder');">
+                        <div class="silly-placeholder-text">😜<span>silly1.jpeg</span></div>
+                    </div>
+                    <span class="silly-caption">Caught in 4K 📸</span>
+                </div>
+                <div class="silly-polaroid" style="--rot:4deg;">
+                    <div class="silly-img-wrap">
+                        <img src="images/silly2.jpeg" alt="Silly 2" class="silly-img" loading="lazy"
+                             onerror="this.classList.add('img-missing');this.parentElement.classList.add('placeholder');">
+                        <div class="silly-placeholder-text">🤭<span>silly2.jpeg</span></div>
+                    </div>
+                    <span class="silly-caption">Delete it? Never.</span>
+                </div>
+                <div class="silly-polaroid" style="--rot:-3deg;">
+                    <div class="silly-img-wrap">
+                        <img src="images/silly3.jpeg" alt="Silly 3" class="silly-img" loading="lazy"
+                             onerror="this.classList.add('img-missing');this.parentElement.classList.add('placeholder');">
+                        <div class="silly-placeholder-text">🙃<span>silly3.jpeg</span></div>
+                    </div>
+                    <span class="silly-caption">My favorite goblin 💗</span>
+                </div>
+                <div class="silly-polaroid" style="--rot:6deg;">
+                    <div class="silly-img-wrap">
+                        <img src="images/silly4.jpeg" alt="Silly 4" class="silly-img" loading="lazy"
+                             onerror="this.classList.add('img-missing');this.parentElement.classList.add('placeholder');">
+                        <div class="silly-placeholder-text">😝<span>silly4.jpeg</span></div>
+                    </div>
+                    <span class="silly-caption">Unhinged & adorable</span>
+                </div>
+                <div class="silly-polaroid" style="--rot:-6deg;">
+                    <div class="silly-img-wrap">
+                        <img src="images/silly5.jpeg" alt="Silly 5" class="silly-img" loading="lazy"
+                             onerror="this.classList.add('img-missing');this.parentElement.classList.add('placeholder');">
+                        <div class="silly-placeholder-text">🥴<span>silly5.jpeg</span></div>
+                    </div>
+                    <span class="silly-caption">Blackmail material 🤫</span>
                 </div>
             </div>
+            <p class="silly-footnote">Disclaimer: I love these more than the cute ones. Don't tell anyone. 🤍</p>
         </div>
     </section>
 
@@ -261,6 +358,10 @@
             <div class="space-grid">
                 <!-- Calendar -->
                 <div class="calendar-card">
+                    <div class="anniversary-countdown" id="anniversary-countdown">
+                        <span class="countdown-label">Next monthly anniversary in</span>
+                        <span class="countdown-value" id="countdown-value">—</span>
+                    </div>
                     <div class="calendar-header">
                         <button class="cal-nav" id="cal-prev">‹</button>
                         <h3 id="cal-month-year"></h3>
@@ -270,9 +371,11 @@
                         <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
                     </div>
                     <div class="calendar-grid" id="cal-grid"></div>
+                    <div class="cal-note" id="cal-note">Tap a glowing day to see what it means 💕</div>
                     <div class="calendar-legend">
-                        <span class="legend-item"><span class="legend-dot special"></span> Our Anniversary</span>
-                        <span class="legend-item"><span class="legend-dot date-night"></span> Date Plans</span>
+                        <span class="legend-item"><span class="legend-dot special"></span> Anniversary (18th)</span>
+                        <span class="legend-item"><span class="legend-dot date-night"></span> Date Plan</span>
+                        <span class="legend-item"><span class="legend-dot today-dot"></span> Today</span>
                     </div>
                 </div>
 
@@ -399,7 +502,7 @@
     <section class="finale" id="finale">
         <div class="container">
             <div class="finale-content">
-                <img src="images/pinchu.jpeg" alt="Us" class="finale-img">
+                <img src="images/photo1.jpeg" alt="Us" class="finale-img">
                 <h2 class="finale-title">Ready for the Next Level, Priyal?</h2>
                 <p class="finale-text">Because I am. I'm all in. You and me against the world.</p>
                 <div class="finale-buttons">
@@ -437,9 +540,12 @@
             <div class="footer-heart">❤️</div>
             <p class="footer-text">Coded with love, just for you Priyal</p>
             <p class="footer-equation">A + P = ∞</p>
-            <p class="footer-small">Made by your person who loves you endlessly | v2.0</p>
+            <p class="footer-small">Made by your person who loves you endlessly · brewed with ☕ & 💕 · v3.0</p>
         </div>
     </footer>
+
+    <!-- Scroll to Top -->
+    <button class="scroll-top" id="scroll-top" aria-label="Back to top">☕</button>
 
     <script src="script.js"></script>
 </body>
