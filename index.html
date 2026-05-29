@@ -1,698 +1,397 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Priyal 💘</title>
-
-  <style>
-    :root{
-      --bg1:#ff4f87;
-      --bg2:#ff9bd1;
-      --glass: rgba(255,255,255,.16);
-      --glass2: rgba(255,255,255,.10);
-      --stroke: rgba(255,255,255,.22);
-      --text: #fff;
-      --shadow: 0 22px 70px rgba(0,0,0,.22);
-      --shadow2: 0 16px 40px rgba(0,0,0,.18);
-    }
-
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      color:var(--text);
-      overflow:hidden;
-      background:
-        radial-gradient(1000px 800px at 10% 15%, rgba(255,255,255,.25), transparent 60%),
-        radial-gradient(900px 700px at 90% 25%, rgba(255,255,255,.18), transparent 60%),
-        linear-gradient(135deg, var(--bg1), var(--bg2));
-    }
-
-    /* floating hearts */
-    .heart{
-      position:fixed;
-      bottom:-40px;
-      font-size:18px;
-      opacity:.9;
-      animation: floatUp linear forwards;
-      filter: drop-shadow(0 8px 14px rgba(0,0,0,.18));
-      pointer-events:none;
-      user-select:none;
-      z-index:1;
-    }
-    @keyframes floatUp{
-      to{ transform: translateY(-120vh) rotate(18deg); opacity:0; }
-    }
-
-    /* layout */
-    .wrap{
-      position:relative;
-      z-index:2;
-      min-height:100%;
-      display:grid;
-      place-items:center;
-      padding:22px;
-    }
-
-    .shell{
-      width:min(1100px, 100%);
-      display:grid;
-      grid-template-columns: 1.15fr .85fr;
-      gap:18px;
-      align-items:stretch;
-    }
-
-    @media (max-width: 900px){
-      body{overflow:auto}
-      .shell{ grid-template-columns: 1fr; }
-    }
-
-    .card{
-      background: linear-gradient(180deg, var(--glass), var(--glass2));
-      border:1px solid var(--stroke);
-      border-radius:28px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(12px);
-      padding:18px;
-      position:relative;
-      overflow:hidden;
-    }
-
-    .topbar{
-      display:flex;
-      gap:12px;
-      align-items:center;
-      justify-content:space-between;
-      flex-wrap:wrap;
-    }
-
-    .chip{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      padding:10px 14px;
-      border-radius:999px;
-      border:1px solid var(--stroke);
-      background: rgba(255,255,255,.12);
-      font-weight:900;
-      letter-spacing:.2px;
-    }
-
-    .pill{
-      display:inline-block;
-      padding:4px 10px;
-      border-radius:999px;
-      border:1px solid var(--stroke);
-      background: rgba(255,255,255,.12);
-      font-weight:900;
-    }
-
-    .btnGhost{
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      padding:10px 14px;
-      border-radius:999px;
-      border:1px solid var(--stroke);
-      background: rgba(255,255,255,.12);
-      color:#fff;
-      font-weight:950;
-      cursor:pointer;
-      transition:.18s transform;
-      user-select:none;
-    }
-    .btnGhost:hover{ transform: translateY(-1px); }
-
-    .hero{
-      padding:12px 6px 6px;
-    }
-    h1{
-      margin:10px 0 8px;
-      font-size: clamp(34px, 4vw, 60px);
-      line-height:1.02;
-      letter-spacing:-.8px;
-    }
-    .sub{
-      margin:0 0 10px;
-      font-size: clamp(16px, 1.7vw, 19px);
-      opacity:.95;
-      line-height:1.45;
-    }
-
-    .note{
-      margin-top:12px;
-      padding:14px;
-      border-radius:20px;
-      border:1px solid var(--stroke);
-      background: rgba(255,255,255,.12);
-      box-shadow: var(--shadow2);
-    }
-    .note p{ margin:0; line-height:1.6; font-weight:650; }
-
-    .actions{
-      margin-top:14px;
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
-      align-items:center;
-      position:relative;
-      min-height:62px;
-      padding-bottom:8px;
-
-      /* prevents NO from stealing YES clicks */
-      isolation: isolate;
-    }
-
-    .btn{
-      border:0;
-      padding:14px 18px;
-      border-radius:18px;
-      font-size:16px;
-      font-weight:1000;
-      cursor:pointer;
-      transition:.18s transform;
-      box-shadow: 0 14px 30px rgba(0,0,0,.16);
-      user-select:none;
-    }
-    .btn:active{ transform: translateY(1px) scale(.99); }
-
-    .yes{
-      background:#fff;
-      color:#ff2f7a;
-      position: relative;
-      z-index: 5; /* always on top */
-    }
-
-    .no{
-      position:absolute;
-      left: 190px;
-      top: 0px;
-      background: rgba(0,0,0,.22);
-      color:#fff;
-      border:1px solid var(--stroke);
-      z-index: 4;
-      touch-action: manipulation;
-
-      transition: left 140ms ease, top 140ms ease, transform 120ms ease, box-shadow 120ms ease;
-    }
-    .no:hover{
-      transform: translateY(-2px) scale(1.05);
-      box-shadow: 0 8px 20px rgba(0,0,0,.25);
-    }
-
-    .hint{
-      margin-top:6px;
-      font-size:13px;
-      opacity:.9;
-    }
-
-    /* slideshow panel */
-    .frame{
-      padding:0;
-      display:grid;
-      place-items:stretch;
-      min-height: 560px;
-    }
-    @media (max-width: 900px){
-      .frame{ min-height: 440px; }
-    }
-
-    .slides{
-      position:relative;
-      width:100%;
-      height:100%;
-      border-radius:28px;
-      overflow:hidden;
-      border:1px solid var(--stroke);
-      box-shadow: var(--shadow);
-    }
-
-    .slide{
-      position:absolute;
-      inset:0;
-      background-size:cover;
-      background-position:center;
-      opacity:0;
-      transform: scale(1.05);
-      transition: opacity 1s ease, transform 1.4s ease;
-      filter: saturate(1.04) contrast(1.03);
-    }
-    .slide.show{
-      opacity:1;
-      transform: scale(1.0);
-    }
-
-    .shade{
-      position:absolute;
-      inset:0;
-      background: linear-gradient(180deg, rgba(0,0,0,0) 45%, rgba(0,0,0,.50));
-      pointer-events:none;
-    }
-
-    .caption{
-      position:absolute;
-      left:14px; right:14px; bottom:14px;
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-end;
-      gap:10px;
-      text-shadow: 0 14px 26px rgba(0,0,0,.55);
-      font-weight:950;
-    }
-    .capSmall{
-      font-size:13px;
-      opacity:.95;
-      font-weight:900;
-    }
-
-    /* NPC */
-    .npc{
-      position:fixed;
-      left:18px;
-      bottom:18px;
-      display:none;
-      align-items:flex-end;
-      gap:14px;
-      z-index:50;
-    }
-    .npc.show{ display:flex; }
-    .npc img{
-      width:120px;
-      height:auto;
-      image-rendering: pixelated;
-      filter: drop-shadow(0 18px 30px rgba(0,0,0,.25));
-      border-radius:14px;
-    }
-    .bubble{
-      max-width:min(560px, calc(100vw - 170px));
-      background: rgba(255,255,255,.92);
-      color:#141414;
-      border-radius:18px;
-      padding:12px 14px;
-      box-shadow: var(--shadow2);
-      border:1px solid rgba(0,0,0,.06);
-      transform-origin:left bottom;
-      animation: pop .18s ease-out;
-    }
-    @keyframes pop{
-      from{ transform: scale(.98); opacity:0; }
-      to{ transform: scale(1); opacity:1; }
-    }
-    .bubble .name{ font-weight:1000; margin-bottom:6px; }
-    .bubble .text{ font-weight:800; line-height:1.45; }
-    .bubble .tiny{ margin-top:8px; font-size:12px; opacity:.72; font-weight:800; }
-
-    /* Modal */
-    .modal{
-      position:fixed;
-      inset:0;
-      display:none;
-      place-items:center;
-      background: rgba(0,0,0,.45);
-      z-index:60;
-      padding:18px;
-    }
-    .modal.show{ display:grid; }
-    .modalCard{
-      width:min(680px, 100%);
-      background: linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.12));
-      border:1px solid var(--stroke);
-      border-radius:26px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(12px);
-      padding:18px;
-      text-align:center;
-    }
-    .modalCard h2{
-      margin:10px 0 6px;
-      font-size: 38px;
-      letter-spacing:-.5px;
-    }
-    .modalCard p{
-      margin:0;
-      opacity:.95;
-      line-height:1.6;
-      font-weight:650;
-      font-size:16px;
-    }
-    .modalRow{
-      margin-top:12px;
-      display:flex;
-      justify-content:center;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    canvas{
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      z-index:70;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Priyal ❤️ | From Your Person</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 </head>
-
 <body>
-  <canvas id="confetti"></canvas>
+    <!-- Particles Background -->
+    <canvas id="particles-canvas"></canvas>
 
-  <div class="wrap">
-    <div class="shell">
-      <!-- LEFT: text -->
-      <div class="card">
-        <div class="topbar">
-          <div class="chip">💌 Made for <span class="pill">Ms Priyal Sanjeev Kumar</span></div>
-          <button class="btnGhost" id="musicBtn" type="button">▶️ Play song</button>
-        </div>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-brand">A + P ❤️</div>
+        <ul class="nav-links">
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#letter">Letter</a></li>
+            <li><a href="#reasons">Why You</a></li>
+            <li><a href="#gallery">Memories</a></li>
+            <li><a href="#timeline">Journey</a></li>
+            <li><a href="#proof">Proof</a></li>
+        </ul>
+        <button class="nav-toggle" id="nav-toggle">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
 
-        <div class="hero">
-          <h1>Hey Priyal… 💘</h1>
-          <p class="sub">
-            This is me doing things properly — because you deserve that.
-          </p>
-
-          <div class="note">
-            <p id="message"></p>
-          </div>
-
-          <div class="actions" id="actions">
-            <button class="btn yes" id="yesBtn" type="button">YES 😭❤️</button>
-            <button class="btn no" id="noBtn" type="button">NO 🙄</button>
-          </div>
-
-          <div class="hint">
-            If you try “NO” even once… my pixel character will start yapping 🕹️
-          </div>
-        </div>
-      </div>
-
-      <!-- RIGHT: slideshow -->
-      <div class="card frame">
-        <div class="slides" aria-label="Slideshow">
-          <div class="slide show" id="s1"></div>
-          <div class="slide" id="s2"></div>
-          <div class="slide" id="s3"></div>
-          <div class="shade"></div>
-          <div class="caption">
-            <div>✨ Us</div>
-            <div class="capSmall" id="slideCount">1 / 3</div>
-          </div>
-        </div>
-      </div>
+    <!-- Music Player -->
+    <div class="music-player" id="music-player">
+        <button class="music-btn" id="music-btn">
+            <span class="music-icon">▶️</span>
+            <span class="music-label">Play Our Voice Note</span>
+        </button>
+        <audio id="voice-audio" preload="auto">
+            <source src="images/voice.m4a" type="audio/mp4">
+        </audio>
     </div>
-  </div>
 
-  <!-- VOICE MEMO -->
-  <audio id="voice" preload="auto">
-    <source src="voice.m4a" type="audio/mp4" />
-  </audio>
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <div class="hero-badge">Since Feb 18, 2026 💕</div>
+            <h1 class="hero-title">
+                <span class="title-line">Priyal,</span>
+                <span class="title-line accent">Every Day With You Is My Favorite Day</span>
+            </h1>
+            <p class="hero-subtitle">This is version 2.0 — because you deserve an upgrade every single day</p>
+            <div class="hero-counter">
+                <div class="counter-item">
+                    <span class="counter-number" id="days-count">0</span>
+                    <span class="counter-label">Days Together</span>
+                </div>
+                <div class="counter-item">
+                    <span class="counter-number" id="hours-count">0</span>
+                    <span class="counter-label">Hours of Love</span>
+                </div>
+                <div class="counter-item">
+                    <span class="counter-number" id="heartbeats-count">0</span>
+                    <span class="counter-label">Heartbeats for You</span>
+                </div>
+            </div>
+            <a href="#letter" class="hero-cta">
+                <span>Open My Heart</span>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M5 12l7 7 7-7"/>
+                </svg>
+            </a>
+        </div>
+    </section>
 
-  <!-- NPC -->
-  <div class="npc" id="npc">
-    <img src="character.jpeg" alt="Character" />
-    <div class="bubble">
-      <div class="name">Akshay.exe</div>
-      <div class="text" id="npcText">…</div>
-      <div class="tiny">Tip: press YES before I unlock chaos 😭</div>
+    <!-- Love Letter Section -->
+    <section class="love-letter" id="letter">
+        <div class="container">
+            <h2 class="section-title">A Letter From My Heart</h2>
+            <div class="letter-wrapper">
+                <div class="envelope-3d" id="envelope">
+                    <div class="envelope-top"></div>
+                    <div class="envelope-back"></div>
+                    <div class="letter-paper" id="letter-paper">
+                        <div class="letter-content">
+                            <p class="letter-greeting">My Dearest Priyal,</p>
+                            <p>100 days ago, my world shifted. You walked in and painted everything in colors I never knew existed. Every single moment since then has been a masterpiece — even the chaotic ones.</p>
+                            <p>You're not just my girlfriend — you're my best friend, my peace in the chaos, the reason I smile at my phone like an idiot, and the person I want beside me through everything.</p>
+                            <p>I made this website (v2.0) because you deserve more than just words. You deserve someone who keeps putting in the effort, who keeps showing up, who keeps choosing you. And that's me. Every single time.</p>
+                            <p>Here's to taking us to the next level. I'm all in. Are you?</p>
+                            <p class="letter-signature">Forever & Always Yours,<br><span class="signature-name">— Akshay ❤️</span></p>
+                        </div>
+                    </div>
+                </div>
+                <p class="envelope-hint" id="envelope-hint">✉️ Click to open the letter</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reasons Section -->
+    <section class="reasons" id="reasons">
+        <div class="container">
+            <h2 class="section-title">Why I'm Crazy About You</h2>
+            <p class="section-subtitle">An incomplete list — the full one would crash this entire website</p>
+            <div class="reasons-carousel">
+                <div class="reasons-track" id="reasons-track">
+                    <div class="reason-card">
+                        <div class="reason-number">01</div>
+                        <div class="reason-icon">💫</div>
+                        <h3>Your Energy</h3>
+                        <p>You light up every room. Your vibe is infectious and I'm happily addicted to it.</p>
+                    </div>
+                    <div class="reason-card">
+                        <div class="reason-number">02</div>
+                        <div class="reason-icon">😊</div>
+                        <h3>That Smile</h3>
+                        <p>One look at your smile and my worst day becomes my best. It's literal magic, Priyal.</p>
+                    </div>
+                    <div class="reason-card">
+                        <div class="reason-number">03</div>
+                        <div class="reason-icon">🧠</div>
+                        <h3>Your Mind</h3>
+                        <p>The way you think, your perspectives, your intelligence — endlessly attractive.</p>
+                    </div>
+                    <div class="reason-card">
+                        <div class="reason-number">04</div>
+                        <div class="reason-icon">🤗</div>
+                        <h3>Your Warmth</h3>
+                        <p>Being with you feels like home. Safe, warm, and exactly where I belong.</p>
+                    </div>
+                    <div class="reason-card">
+                        <div class="reason-number">05</div>
+                        <div class="reason-icon">😂</div>
+                        <h3>Our Inside Jokes</h3>
+                        <p>Nobody else would understand, and that's what makes it special — it's just us.</p>
+                    </div>
+                    <div class="reason-card">
+                        <div class="reason-number">06</div>
+                        <div class="reason-icon">💪</div>
+                        <h3>Your Strength</h3>
+                        <p>The way you handle life inspires me. You're so much stronger than you know.</p>
+                    </div>
+                    <div class="reason-card">
+                        <div class="reason-number">07</div>
+                        <div class="reason-icon">🌙</div>
+                        <h3>Late Night Talks</h3>
+                        <p>3 AM conversations where we forget time exists. Those are my favorite hours.</p>
+                    </div>
+                    <div class="reason-card">
+                        <div class="reason-number">08</div>
+                        <div class="reason-icon">🦋</div>
+                        <h3>The Butterflies</h3>
+                        <p>100+ days in and I still get nervous when you text. That's how I know this is real.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-controls">
+                <button class="carousel-btn prev" id="prev-btn">←</button>
+                <div class="carousel-dots" id="carousel-dots"></div>
+                <button class="carousel-btn next" id="next-btn">→</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Photo Gallery -->
+    <section class="gallery" id="gallery">
+        <div class="container">
+            <h2 class="section-title">Our Memories</h2>
+            <p class="section-subtitle">Every picture tells a piece of our story</p>
+            <div class="gallery-grid">
+                <div class="gallery-item large">
+                    <img src="images/photo1.jpeg" alt="Us together" class="gallery-img" loading="lazy">
+                    <div class="gallery-overlay"><p>Us ❤️</p></div>
+                </div>
+                <div class="gallery-item">
+                    <img src="images/photo2.jpeg" alt="Our memories" class="gallery-img" loading="lazy">
+                    <div class="gallery-overlay"><p>Together</p></div>
+                </div>
+                <div class="gallery-item">
+                    <img src="images/photo3.jpeg" alt="Our moments" class="gallery-img" loading="lazy">
+                    <div class="gallery-overlay"><p>My Favorite View</p></div>
+                </div>
+                <div class="gallery-item">
+                    <img src="images/memory1.jpeg" alt="Memory 1" class="gallery-img" loading="lazy">
+                    <div class="gallery-overlay"><p>Making Memories</p></div>
+                </div>
+                <div class="gallery-item">
+                    <img src="images/memory2.jpeg" alt="Memory 2" class="gallery-img" loading="lazy">
+                    <div class="gallery-overlay"><p>Adventures</p></div>
+                </div>
+                <div class="gallery-item large">
+                    <img src="images/memory3.jpeg" alt="Memory 3" class="gallery-img" loading="lazy">
+                    <div class="gallery-overlay"><p>Forever & Always</p></div>
+                </div>
+                <div class="gallery-item">
+                    <img src="images/memory4.jpeg" alt="Memory 4" class="gallery-img" loading="lazy">
+                    <div class="gallery-overlay"><p>Our World</p></div>
+                </div>
+                <div class="gallery-item">
+                    <img src="images/pinchu.jpeg" alt="Pinchu" class="gallery-img" loading="lazy">
+                    <div class="gallery-overlay"><p>Pinchu 🐼</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section class="timeline" id="timeline">
+        <div class="container">
+            <h2 class="section-title">Our Journey Together</h2>
+            <p class="section-subtitle">From strangers to soulmates</p>
+            <div class="timeline-wrapper">
+                <div class="timeline-line"></div>
+                <div class="timeline-item" data-aos="left">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">The Beginning</div>
+                        <h3>When We First Met</h3>
+                        <p>I didn't know it then, but that moment changed everything. The universe was setting us up.</p>
+                    </div>
+                </div>
+                <div class="timeline-item" data-aos="right">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">The Spark</div>
+                        <h3>Late Night Conversations</h3>
+                        <p>Texts turned into calls. Calls turned into "I don't want to hang up." That's when I knew.</p>
+                    </div>
+                </div>
+                <div class="timeline-item" data-aos="left">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">February 18, 2026</div>
+                        <h3>We Became Official</h3>
+                        <p>Official. Committed. All in. The best decision I ever made — and I'd make it a thousand times over.</p>
+                    </div>
+                </div>
+                <div class="timeline-item" data-aos="right">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">Today & Beyond</div>
+                        <h3>100+ Days Strong</h3>
+                        <p>And I'm more sure about you than ever. This is just the beginning of our forever.</p>
+                    </div>
+                </div>
+                <div class="timeline-item" data-aos="left">
+                    <div class="timeline-dot pulse"></div>
+                    <div class="timeline-content future">
+                        <div class="timeline-date">The Future</div>
+                        <h3>Next Level</h3>
+                        <p>More adventures. More memories. More us. I can't wait for what's coming, Priyal.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Proof of Love Section -->
+    <section class="proof-of-love" id="proof">
+        <div class="container">
+            <h2 class="section-title">Proof That I'm Down Bad</h2>
+            <p class="section-subtitle">Evidence that this man is officially whipped — and proud of it</p>
+            
+            <div class="proof-grid">
+                <div class="proof-card dissertation">
+                    <div class="proof-badge">EXHIBIT A 📖</div>
+                    <div class="proof-icon">🎓</div>
+                    <h3>Your Name On My Dissertation</h3>
+                    <p>She wrote her name on my final year dissertation. Not a notebook. Not a random paper. The dissertation. The one that's submitted, graded, and archived forever.</p>
+                    <p>Your name. Next to mine. Permanent. On an actual academic document. If that's not a sign from the universe, I don't know what is.</p>
+                    <p class="proof-punchline">Other couples share hoodies. We share academic records. This is forever — literally on paper. 📜</p>
+                    <div class="proof-tag">Level: Permanently Yours</div>
+                </div>
+                
+                <div class="proof-card nails">
+                    <div class="proof-badge">EXHIBIT B 💅</div>
+                    <div class="proof-icon">⏰</div>
+                    <h3>Nail Appointment Companion</h3>
+                    <p>Sat through the full nail appointment. The filing. The soaking. The choosing of 47 slightly different shades of pink. The drying. ALL OF IT.</p>
+                    <p class="proof-punchline">And I'll do it again. Every. Single. Time. (I've memorized the salon WiFi password already)</p>
+                    <div class="proof-tag">Level: True Love</div>
+                </div>
+                
+                <div class="proof-card website">
+                    <div class="proof-badge">EXHIBIT C 💻</div>
+                    <div class="proof-icon">🌐</div>
+                    <h3>Built Her TWO Websites</h3>
+                    <p>Not a text. Not a card. TWO FULL WEBSITES. With animations. And a love meter. And confetti. Because she deserves more than just "wyd".</p>
+                    <p class="proof-punchline">This is version 2.0 btw. The first one wasn't enough for her. Nothing ever will be. She deserves infinite upgrades.</p>
+                    <div class="proof-tag">Level: Down Horrendous</div>
+                </div>
+            </div>
+
+            <div class="proof-footer">
+                <p>Verdict: Guilty of being completely, hopelessly, stupidly in love with Priyal 🫠</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Section -->
+    <section class="interactive" id="interactive">
+        <div class="container">
+            <div class="love-meter-box">
+                <h2>How Much Do I Love You?</h2>
+                <div class="love-meter">
+                    <div class="meter-fill" id="meter-fill"></div>
+                    <div class="meter-text" id="meter-text">Move your mouse / tap!</div>
+                </div>
+                <p class="meter-result" id="meter-result"></p>
+            </div>
+
+            <div class="promise-box">
+                <h2>My Promises To You</h2>
+                <div class="promises-list">
+                    <div class="promise-item">
+                        <input type="checkbox" checked disabled>
+                        <span>I'll always choose you</span>
+                    </div>
+                    <div class="promise-item highlight">
+                        <input type="checkbox" checked disabled>
+                        <span>I'll always be there while you get your nails done 💅 (yes, even the 2-hour sessions)</span>
+                    </div>
+                    <div class="promise-item">
+                        <input type="checkbox" checked disabled>
+                        <span>I'll make you laugh every single day</span>
+                    </div>
+                    <div class="promise-item">
+                        <input type="checkbox" checked disabled>
+                        <span>I'll hold your bags while you shop (it's cardio for me)</span>
+                    </div>
+                    <div class="promise-item">
+                        <input type="checkbox" checked disabled>
+                        <span>I'll never stop putting in effort — ever</span>
+                    </div>
+                    <div class="promise-item">
+                        <input type="checkbox" checked disabled>
+                        <span>I'll always say "yes babe you look amazing" (because you always do)</span>
+                    </div>
+                    <div class="promise-item">
+                        <input type="checkbox" checked disabled>
+                        <span>I'll build us an amazing future together</span>
+                    </div>
+                    <div class="promise-item highlight">
+                        <input type="checkbox" checked disabled>
+                        <span>Your name on my dissertation — permanent. Yours next to mine, forever on paper 📖</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Finale Section -->
+    <section class="finale" id="finale">
+        <div class="container">
+            <div class="finale-content">
+                <img src="images/pinchu.jpeg" alt="Us" class="finale-img">
+                <h2 class="finale-title">Ready for the Next Level, Priyal?</h2>
+                <p class="finale-text">Because I am. I'm all in. You and me against the world.</p>
+                <div class="finale-buttons">
+                    <button class="btn-heart" id="btn-yes">
+                        <span>Yes, Let's Go! 🚀</span>
+                    </button>
+                    <div class="btn-no-wrapper" id="btn-no-wrapper">
+                        <button class="btn-maybe" id="btn-no">Maybe Not 😅</button>
+                    </div>
+                </div>
+                <div class="finale-celebration hidden" id="celebration">
+                    <div class="confetti-container" id="confetti"></div>
+                    <h2>I KNEW IT! 💖🎉</h2>
+                    <p>You just made me the happiest person on this planet!</p>
+                    <p class="celebration-sub">Here's to us — today, tomorrow, and forever ∞</p>
+                    <p class="celebration-sub">Love you my pinchu panda 🐼❤️</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NPC Easter Egg (from v1!) -->
+    <div class="npc" id="npc">
+        <img src="images/character.jpeg" alt="Akshay.exe">
+        <div class="npc-bubble">
+            <div class="npc-name">Akshay.exe</div>
+            <div class="npc-text" id="npc-text">...</div>
+            <div class="npc-tip">Tip: press YES before I unlock chaos 😭</div>
+        </div>
     </div>
-  </div>
 
-  <!-- YES modal (PINCHU) -->
-  <div class="modal" id="modal">
-    <div class="modalCard">
-      <h2>Love you my pinchu panda 😭💘</h2>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-heart">❤️</div>
+            <p class="footer-text">Coded with love, just for you Priyal</p>
+            <p class="footer-equation">A + P = ∞</p>
+            <p class="footer-small">Made by your person who loves you endlessly | v2.0</p>
+        </div>
+    </footer>
 
-      <img src="pinchu.jpeg"
-           alt="Pinchu"
-           style="width:min(280px,85%);border-radius:22px;margin:14px 0;box-shadow:0 16px 45px rgba(0,0,0,.28);">
-
-      <p>
-        Okay wow… you just made me the happiest guy alive.<br><br>
-        Now send me a screenshot with: <b>“Yes, I’m your Valentine.”</b> 😌❤️
-      </p>
-
-      <div class="modalRow">
-        <button class="btn yes" id="closeBtn" type="button">Close 🥰</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // -------------------------
-    // CUSTOM MESSAGE
-    // -------------------------
-    const customMessage = `
-      Hi <b>Ms Priyal Sanjeev Kumar</b>… 💗<br><br>
-
-      I know I joke a lot.
-      I tease you.
-      I call you things you pretend to hate.<br><br>
-
-      But this part is real.<br><br>
-
-      There’s something about you —
-      the way you care,
-      the way you stay strong,
-      the way you make everything feel lighter.<br><br>
-
-      You’ve quietly become my favourite person.<br><br>
-
-      So no drama.
-      No running away.
-      Just me asking you properly…<br><br>
-
-      <b>Will you be my Valentine?</b> 🌹
-    `;
-    document.getElementById("message").innerHTML = customMessage;
-
-    // -------------------------
-    // SLIDESHOW
-    // -------------------------
-    const slides = ["photo1.jpeg","photo2.jpeg","photo3.jpeg"];
-    const slideEls = [
-      document.getElementById("s1"),
-      document.getElementById("s2"),
-      document.getElementById("s3")
-    ];
-    slides.forEach((src,i)=> slideEls[i].style.backgroundImage = `url('${src}')`);
-
-    let idx = 0;
-    const slideCount = document.getElementById("slideCount");
-    setInterval(() => {
-      slideEls[idx].classList.remove("show");
-      idx = (idx + 1) % 3;
-      slideEls[idx].classList.add("show");
-      slideCount.textContent = `${idx+1} / 3`;
-    }, 3200);
-
-    // -------------------------
-    // VOICE MEMO BUTTON
-    // -------------------------
-    const voice = document.getElementById("voice");
-    const musicBtn = document.getElementById("musicBtn");
-    let playing = false;
-
-    musicBtn.addEventListener("click", async () => {
-      try{
-        if(!playing){
-          if (voice.ended) voice.currentTime = 0;
-          await voice.play();
-          playing = true;
-          musicBtn.textContent = "⏸️ Pause";
-          burstHearts(10);
-        }else{
-          voice.pause();
-          playing = false;
-          musicBtn.textContent = "▶️ Play song";
-        }
-      }catch(e){
-        alert("Tap again — phones block audio until you interact.");
-      }
-    });
-
-    voice.addEventListener("ended", () => {
-      playing = false;
-      musicBtn.textContent = "▶️ Play song";
-    });
-
-    // -------------------------
-    // HEARTS
-    // -------------------------
-    const heartEmojis = ["❤️","💗","💖","💘","💕","🌹","✨"];
-    function spawnHeart(){
-      const h = document.createElement("div");
-      h.className = "heart";
-      h.textContent = heartEmojis[Math.floor(Math.random()*heartEmojis.length)];
-      h.style.left = Math.random()*100 + "vw";
-      h.style.animationDuration = (3.5 + Math.random()*3.5) + "s";
-      h.style.fontSize = (14 + Math.random()*18) + "px";
-      document.body.appendChild(h);
-      setTimeout(()=>h.remove(), 7500);
-    }
-    setInterval(spawnHeart, 260);
-    function burstHearts(n){ for(let i=0;i<n;i++) setTimeout(spawnHeart, i*35); }
-
-    // -------------------------
-    // CONFETTI
-    // -------------------------
-    const canvas = document.getElementById("confetti");
-    const ctx = canvas.getContext("2d");
-    let W,H, confetti = [], raf;
-
-    function resize(){
-      W = canvas.width = window.innerWidth;
-      H = canvas.height = window.innerHeight;
-    }
-    window.addEventListener("resize", resize);
-    resize();
-
-    function rand(a,b){ return Math.random()*(b-a)+a; }
-
-    function launchConfetti(){
-      cancelAnimationFrame(raf);
-      confetti = [];
-      for(let i=0;i<230;i++){
-        confetti.push({
-          x: rand(0,W), y: rand(-H,0),
-          r: rand(3,6), vy: rand(2,6), vx: rand(-2.3,2.3),
-          rot: rand(0,Math.PI), vr: rand(-0.2,0.2),
-          life: rand(70,150)
-        });
-      }
-      (function anim(){
-        ctx.clearRect(0,0,W,H);
-        confetti.forEach(p=>{
-          p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr; p.life--;
-          const hue = (p.x/W)*360;
-          ctx.save();
-          ctx.translate(p.x,p.y);
-          ctx.rotate(p.rot);
-          ctx.fillStyle = `hsl(${hue}, 95%, 70%)`;
-          ctx.fillRect(-p.r, -p.r, p.r*2.2, p.r*1.4);
-          ctx.restore();
-        });
-        confetti = confetti.filter(p=> p.life>0 && p.y < H+30);
-        if(confetti.length) raf=requestAnimationFrame(anim);
-      })();
-      setTimeout(()=>cancelAnimationFrame(raf), 4600);
-    }
-
-    // -------------------------
-    // YES MODAL (YES ALWAYS WORKS)
-    // -------------------------
-    const modal = document.getElementById("modal");
-    const yesBtn = document.getElementById("yesBtn");
-    const closeBtn = document.getElementById("closeBtn");
-
-    yesBtn.addEventListener("click", () => {
-      launchConfetti();
-      burstHearts(28);
-      modal.classList.add("show");
-    });
-
-    closeBtn.addEventListener("click", ()=> {
-      modal.classList.remove("show");
-
-      voice.pause();
-      voice.currentTime = 0;
-      playing = false;
-      musicBtn.textContent = "▶️ Play song";
-    });
-
-    modal.addEventListener("click", (e)=>{ if(e.target===modal) modal.classList.remove("show"); });
-
-    // -------------------------
-    // NO + NPC (QUEUE + LOCK)
-    // - NO can be clicked anytime
-    // - it will only ADVANCE the dialog after the current line finishes typing
-    // - YES always works
-    // -------------------------
-    const noBtn = document.getElementById("noBtn");
-    const actions = document.getElementById("actions");
-    const npc = document.getElementById("npc");
-    const npcText = document.getElementById("npcText");
-
-    const npcLines = [
-      "Okay… we’re clicking NO now? Bold move.",
-      "You know he practiced this speech 14 times right?",
-      "He even fixed the bugs in this website for you.",
-      "Don’t make me start emotional dialogue mode…",
-      "Fine. Serious voice activated.",
-      "He really likes you, Priyal.",
-      "Now press YES before I unlock desperation DLC 😭"
-    ];
-
-    let noCount = 0;
-    let typingTimer = null;
-    let isTyping = false;
-    const dialogQueue = [];
-
-    function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
-
-    function moveNoButton(){
-      const rect = actions.getBoundingClientRect();
-      const btnRect = noBtn.getBoundingClientRect();
-
-      const pad = 6;
-      const maxX = Math.max(0, rect.width - btnRect.width - pad);
-      const maxY = Math.max(0, rect.height - btnRect.height - pad);
-
-      const x = clamp(Math.floor(Math.random() * (maxX + 1)), 0, maxX);
-      const y = clamp(Math.floor(Math.random() * (maxY + 1)), 0, maxY);
-
-      noBtn.style.left = x + "px";
-      noBtn.style.top  = y + "px";
-    }
-
-    function typeText(el, text, speed=16, done){
-      clearInterval(typingTimer);
-      el.textContent = "";
-      isTyping = true;
-
-      let i = 0;
-      typingTimer = setInterval(()=>{
-        el.textContent += text[i] || "";
-        i++;
-        if(i > text.length){
-          clearInterval(typingTimer);
-          isTyping = false;
-          if (done) done();
-        }
-      }, speed);
-    }
-
-    function playNextDialog(){
-      if (isTyping) return;
-      const next = dialogQueue.shift();
-      if (!next) return;
-
-      npc.classList.add("show");
-      typeText(npcText, next, 16, () => {
-        // After finishing a line, automatically play next queued line (if any)
-        playNextDialog();
-      });
-    }
-
-    function handleNoAttempt(ev){
-      // One event for mouse + touch (prevents double-fire)
-      if (ev.pointerType === "touch") ev.preventDefault();
-
-      // Move the button only on actual click/tap
-      noCount++;
-      moveNoButton();
-      burstHearts(4);
-
-      // queue next dialog line
-      const line = npcLines[Math.min(noCount - 1, npcLines.length - 1)];
-      dialogQueue.push(line);
-
-      // start dialog if not already typing
-      playNextDialog();
-    }
-
-    // ✅ only ONE listener: pointerdown
-    noBtn.addEventListener("pointerdown", handleNoAttempt, {passive:false});
-  </script>
+    <script src="script.js"></script>
 </body>
 </html>
