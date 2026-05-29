@@ -20,7 +20,7 @@
             <li><a href="#reasons">Why You</a></li>
             <li><a href="#gallery">Memories</a></li>
             <li><a href="#timeline">Journey</a></li>
-            <li><a href="#proof">For Us</a></li>
+            <li><a href="#our-space">Our Space</a></li>
         </ul>
         <button class="nav-toggle" id="nav-toggle">
             <span></span><span></span><span></span>
@@ -46,7 +46,7 @@
                 <span class="title-line">Priyal,</span>
                 <span class="title-line accent">Every Day With You Is My Favorite Day</span>
             </h1>
-            <p class="hero-subtitle">This is version 2.0 — because you deserve an upgrade every single day</p>
+            <p class="hero-subtitle">This is our space. Come here whenever you need to feel loved.</p>
             <div class="hero-counter">
                 <div class="counter-item">
                     <span class="counter-number" id="days-count">0</span>
@@ -252,44 +252,93 @@
         </div>
     </section>
 
-    <!-- Proof of Love Section -->
-    <section class="proof-of-love" id="proof">
+    <!-- Our Space — Calendar & Plans Section -->
+    <section class="our-space" id="our-space">
         <div class="container">
-            <h2 class="section-title">Things I've Done For Us</h2>
-            <p class="section-subtitle">Because you deserve someone who shows up — every single time</p>
-            
-            <div class="proof-grid">
-                <div class="proof-card dissertation">
-                    <div class="proof-badge">EXHIBIT A 📖</div>
-                    <div class="proof-icon">🎓</div>
-                    <h3>Your Name On My Dissertation</h3>
-                    <p>She wrote her name on my final year dissertation. Not a notebook. Not a random paper. The dissertation. The one that's submitted, graded, and archived forever.</p>
-                    <p>Your name. Next to mine. Permanent. On an actual academic document. If that's not a sign from the universe, I don't know what is.</p>
-                    <p class="proof-punchline">Other couples share hoodies. We share academic records. This is forever — literally on paper. 📜</p>
-                    <div class="proof-tag">Level: Permanently Yours</div>
+            <h2 class="section-title">Our Little World</h2>
+            <p class="section-subtitle">Our plans, our dates, our future — all in one place. This is home.</p>
+
+            <div class="space-grid">
+                <!-- Calendar -->
+                <div class="calendar-card">
+                    <div class="calendar-header">
+                        <button class="cal-nav" id="cal-prev">‹</button>
+                        <h3 id="cal-month-year"></h3>
+                        <button class="cal-nav" id="cal-next">›</button>
+                    </div>
+                    <div class="calendar-days">
+                        <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+                    </div>
+                    <div class="calendar-grid" id="cal-grid"></div>
+                    <div class="calendar-legend">
+                        <span class="legend-item"><span class="legend-dot special"></span> Our Anniversary</span>
+                        <span class="legend-item"><span class="legend-dot date-night"></span> Date Plans</span>
+                    </div>
                 </div>
-                
-                <div class="proof-card nails">
-                    <div class="proof-badge">EXHIBIT B 💅</div>
-                    <div class="proof-icon">⏰</div>
-                    <h3>Nail Appointment Companion</h3>
-                    <p>Sat through the full nail appointment. The filing. The soaking. The choosing of 47 slightly different shades of pink. The drying. ALL OF IT.</p>
-                    <p class="proof-punchline">And I'll do it again. Every. Single. Time. (I've memorized the salon WiFi password already)</p>
-                    <div class="proof-tag">Level: True Love</div>
-                </div>
-                
-                <div class="proof-card website">
-                    <div class="proof-badge">EXHIBIT C 💻</div>
-                    <div class="proof-icon">🌐</div>
-                    <h3>Built Her TWO Websites</h3>
-                    <p>Not a text. Not a card. TWO FULL WEBSITES. With animations. And a love meter. And confetti. Because she deserves more than just words.</p>
-                    <p class="proof-punchline">This is version 2.0. The first one was special — but she deserves an upgrade every single day.</p>
-                    <div class="proof-tag">Level: All In</div>
+
+                <!-- Upcoming Plans -->
+                <div class="plans-card">
+                    <h3>Upcoming Plans 💭</h3>
+                    <div class="plans-list" id="plans-list">
+                        <div class="plan-item">
+                            <div class="plan-date">
+                                <span class="plan-day">18</span>
+                                <span class="plan-month">Every Month</span>
+                            </div>
+                            <div class="plan-details">
+                                <h4>Monthly Anniversary 💕</h4>
+                                <p>Celebrate us — because every month with you is worth celebrating</p>
+                            </div>
+                        </div>
+                        <div class="plan-item">
+                            <div class="plan-date">
+                                <span class="plan-day">☕</span>
+                                <span class="plan-month">Next</span>
+                            </div>
+                            <div class="plan-details">
+                                <h4>Cafe Date</h4>
+                                <p>Find a new cozy spot together, steal sips from each other's cups</p>
+                            </div>
+                        </div>
+                        <div class="plan-item">
+                            <div class="plan-date">
+                                <span class="plan-day">🌅</span>
+                                <span class="plan-month">Soon</span>
+                            </div>
+                            <div class="plan-details">
+                                <h4>Sunset Drive</h4>
+                                <p>Windows down, our playlist on, nowhere to be — just us</p>
+                            </div>
+                        </div>
+                        <div class="plan-item">
+                            <div class="plan-date">
+                                <span class="plan-day">🎬</span>
+                                <span class="plan-month">Anytime</span>
+                            </div>
+                            <div class="plan-details">
+                                <h4>Movie Night</h4>
+                                <p>Your pick. I'll pretend I'm watching even though I'll be looking at you</p>
+                            </div>
+                        </div>
+                        <div class="plan-item">
+                            <div class="plan-date">
+                                <span class="plan-day">✈️</span>
+                                <span class="plan-month">Dream</span>
+                            </div>
+                            <div class="plan-details">
+                                <h4>Our First Trip Together</h4>
+                                <p>Doesn't matter where — anywhere with you is my favorite place</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="proof-footer">
-                <p>Because loving you isn't something I do — it's who I am now 💕</p>
+            <!-- Emotional Note -->
+            <div class="home-note">
+                <div class="home-note-icon">🏠</div>
+                <p>This isn't just a website, Priyal. This is our space. A place where our love lives. Where our memories are safe. Where our plans take shape. Where you can always come back to and know — you are loved, you are chosen, you are home.</p>
+                <p class="home-note-signature">— Your person, always</p>
             </div>
         </div>
     </section>
@@ -311,35 +360,35 @@
                 <div class="promises-list">
                     <div class="promise-item">
                         <input type="checkbox" checked disabled>
-                        <span>I'll always choose you</span>
+                        <span>I'll always choose you — on the easy days and the hard ones</span>
+                    </div>
+                    <div class="promise-item">
+                        <input type="checkbox" checked disabled>
+                        <span>I'll always show up. For the big moments and the small ones.</span>
+                    </div>
+                    <div class="promise-item">
+                        <input type="checkbox" checked disabled>
+                        <span>I'll sit with you through everything — nail appointments, long days, and quiet nights 💅</span>
+                    </div>
+                    <div class="promise-item">
+                        <input type="checkbox" checked disabled>
+                        <span>I'll never stop making you feel loved</span>
+                    </div>
+                    <div class="promise-item">
+                        <input type="checkbox" checked disabled>
+                        <span>I'll protect what we have with everything I've got</span>
+                    </div>
+                    <div class="promise-item">
+                        <input type="checkbox" checked disabled>
+                        <span>I'll keep building us a future worth dreaming about</span>
                     </div>
                     <div class="promise-item highlight">
                         <input type="checkbox" checked disabled>
-                        <span>I'll always be there while you get your nails done 💅 (yes, even the 2-hour sessions)</span>
-                    </div>
-                    <div class="promise-item">
-                        <input type="checkbox" checked disabled>
-                        <span>I'll make you laugh every single day</span>
-                    </div>
-                    <div class="promise-item">
-                        <input type="checkbox" checked disabled>
-                        <span>I'll hold your bags while you shop (it's cardio for me)</span>
-                    </div>
-                    <div class="promise-item">
-                        <input type="checkbox" checked disabled>
-                        <span>I'll never stop putting in effort — ever</span>
-                    </div>
-                    <div class="promise-item">
-                        <input type="checkbox" checked disabled>
-                        <span>I'll always say "yes babe you look amazing" (because you always do)</span>
-                    </div>
-                    <div class="promise-item">
-                        <input type="checkbox" checked disabled>
-                        <span>I'll build us an amazing future together</span>
+                        <span>Your name next to mine — on paper, in my heart, forever 📖</span>
                     </div>
                     <div class="promise-item highlight">
                         <input type="checkbox" checked disabled>
-                        <span>Your name on my dissertation — permanent. Yours next to mine, forever on paper 📖</span>
+                        <span>I'll make sure you never have to question if you're loved</span>
                     </div>
                 </div>
             </div>

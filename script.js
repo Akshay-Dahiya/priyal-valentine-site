@@ -432,3 +432,73 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 console.log('%c❤️ Made with love for Priyal ❤️', 'font-size: 20px; color: #e91e63;');
 console.log('%cIf you\'re reading this code... yes, I love her this much.', 'font-size: 14px; color: #ff6090;');
 console.log('%cv2.0 — Because she deserves an upgrade every day.', 'font-size: 12px; color: #f48fb1;');
+
+
+
+// ========== CALENDAR ==========
+const calGrid = document.getElementById('cal-grid');
+const calMonthYear = document.getElementById('cal-month-year');
+const calPrev = document.getElementById('cal-prev');
+const calNext = document.getElementById('cal-next');
+
+let calDate = new Date();
+
+// Special dates
+const specialDates = {
+    // Format: 'YYYY-MM-DD': 'type' (special = anniversary, date-night = planned dates)
+    '18': 'special', // 18th of every month is your anniversary
+};
+
+function renderCalendar() {
+    const year = calDate.getFullYear();
+    const month = calDate.getMonth();
+    const today = new Date();
+
+    const months = ['January', 'February', 'March', 'April', 'May', 'June',
+                    'July', 'August', 'September', 'October', 'November', 'December'];
+
+    calMonthYear.textContent = `${months[month]} ${year}`;
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    calGrid.innerHTML = '';
+
+    // Empty cells before first day
+    for (let i = 0; i < firstDay; i++) {
+        const empty = document.createElement('div');
+        empty.className = 'cal-day empty';
+        calGrid.appendChild(empty);
+    }
+
+    // Day cells
+    for (let day = 1; day <= daysInMonth; day++) {
+        const cell = document.createElement('div');
+        cell.className = 'cal-day';
+        cell.textContent = day;
+
+        // Highlight today
+        if (day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+            cell.classList.add('today');
+        }
+
+        // Highlight 18th (monthly anniversary)
+        if (day === 18) {
+            cell.classList.add('special');
+        }
+
+        calGrid.appendChild(cell);
+    }
+}
+
+calPrev.addEventListener('click', () => {
+    calDate.setMonth(calDate.getMonth() - 1);
+    renderCalendar();
+});
+
+calNext.addEventListener('click', () => {
+    calDate.setMonth(calDate.getMonth() + 1);
+    renderCalendar();
+});
+
+renderCalendar();
